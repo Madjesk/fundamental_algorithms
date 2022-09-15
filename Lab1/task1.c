@@ -33,15 +33,11 @@ void isPrimeOrСomposite(int num) {
     }
     if(!isComposite) {
         if(num == 1) {
-            printf("The number 1 has only one divisor and is neither prime nor composite.");
-        }
-        else if(num == 0) {
-            printf("Zero is not a natural number and therefore is neither prime nor composite.");
+            printf("The number 1 has only one divisor and is neither prime nor composite\n");
         } else {
-            printf("Number is Prime");
+            printf("Number is Prime\n");
         }
     }
-
 }
 
 void printDigitsOfNumber(int num) {
@@ -72,10 +68,18 @@ void printNumberInDegreeN(int n) {
     }
 }
 
+long long calculateFactorial(long long num) {
+    if(num == 1) {
+        return 1;
+    } else {
+        return num* calculateFactorial(num-1);
+    }
+}
+
 int main(int argc, char * argv[]) {
     if(argc != 3) {
         printf("Wrong! Write: number -flag or /flag\n");
-        //todo: выход?
+        return 0;
     }
 
     if(strcmp(argv[2], "-h") == 0 || strcmp(argv[2], "/h") == 0) {
@@ -98,6 +102,7 @@ int main(int argc, char * argv[]) {
         printSumOfNumbers(cloneAtoi(argv[1]));
     }
     else if(strcmp(argv[2], "-f") == 0 || strcmp(argv[2], "/f") == 0) {
+        printf("%lld", calculateFactorial(cloneAtoi(argv[1])));
     }
 
     return 0;
