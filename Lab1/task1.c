@@ -1,32 +1,39 @@
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
-#include <limits.h>
 
 int cloneAtoi(char *s) {
     int result = 0;
     for(int i=0; s[i] != '\0'; i++) {
         result = result*10 + s[i] - '0';
     }
+    if (result <0) {
+        printf("Error!");
+        return 0;
+    }
     return  result;
 }
 
 void printMultiples(int num) {
     int findMultiples = 0;
-    for(int i=num; i <=100; i++) {
+    for(int i=num; i <101; i++) {
         if(i % num == 0) {
             printf("%d\n", i);
             findMultiples = 1;
         }
     }
-    if (findMultiples == 0) {
+    if (!findMultiples) {
         printf("Multiples not found\n");
     }
 }
 
-void isPrimeOrComposite(int num) {
+int isPrimeOrComposite(int num) {
     int isComposite = 0;
-    for(int i=2;i<=sqrt(num);i++) {
+    if((num & 1) == 0) {
+        printf("Number is Сomposite\n");
+        return 0;
+    }
+    for(int i=3;i<=floor(sqrt(num));i+=2) {
         if(num%i == 0) {
             printf("Number is Сomposite\n");
             isComposite = 1;
@@ -40,6 +47,7 @@ void isPrimeOrComposite(int num) {
             printf("Number is Prime\n");
         }
     }
+    return 0;
 }
 
 void printDigitsOfNumber(int num) {
@@ -47,7 +55,6 @@ void printDigitsOfNumber(int num) {
         printDigitsOfNumber(num/10);
         printf("%d ", num % 10);
     }
-    printf("\n");
 }
 
 void printSumOfNumbers(int num) {
@@ -58,7 +65,7 @@ void printSumOfNumbers(int num) {
     printf("%ld\n", sum);
 }
 
-void printNumberInDegreeN(int n) {
+void printNumbersInDegreeN(int n) {
     unsigned long tmp = 1;
     for(int i = 1; i <= 10; i++) {
         printf("%d: ", i);
@@ -71,7 +78,7 @@ void printNumberInDegreeN(int n) {
     }
 }
 
-unsigned long calculateFactorial(int num) {
+long calculateFactorial(unsigned long num) {
     unsigned long tmp = num;
     if(tmp == 1) {
         return 1;
@@ -99,14 +106,14 @@ int main(int argc, char * argv[]) {
         if(cloneAtoi(argv[1]) > 10) {
             printf("Your number is too big!\n");
         } else {
-            printNumberInDegreeN(cloneAtoi(argv[1]));
+            printNumbersInDegreeN(cloneAtoi(argv[1]));
         }
     }
     else if(strcmp(argv[2], "-a") == 0 || strcmp(argv[2], "/a") == 0) {
         printSumOfNumbers(cloneAtoi(argv[1]));
     }
     else if(strcmp(argv[2], "-f") == 0 || strcmp(argv[2], "/f") == 0) {
-        printf("%ld", calculateFactorial(cloneAtoi(argv[1])));
+        printf("%ld\n", calculateFactorial(cloneAtoi(argv[1])));
     }
     else {
         printf("This flag does not exist");
