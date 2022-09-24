@@ -59,7 +59,6 @@ void solveEqation(float a, float b, float c) {
             }
         }
     }
-
 }
 
 void isRightTriangle(float a, float b, float c) {
@@ -74,19 +73,19 @@ void isRightTriangle(float a, float b, float c) {
     }
 }
 
-int isMultiple(float a, float b) {
-    if(fabs(b) < EPSILON) {
-        printf("you wrote 0\n!");
+int isMultiple(int a, int b) {
+    if(b == 0 || a==0) {
+        printf("You wrote 0");
         return 0;
     }
-    if(((int)a) % ((int)b) == 0) {
+
+    if(a % b ==0) {
         return 1;
     } else {
         return 0;
     }
 }
 
-//file flag 1 2 3
 int main(int argc, char * argv[]) {
     if(argc > 5 || argc < 4 ) {
         printf("Wrong input!\n");
@@ -96,7 +95,7 @@ int main(int argc, char * argv[]) {
         solveEqation(cloneAtof(argv[2]),cloneAtof(argv[3]), cloneAtof(argv[4]));
     }
     else if((strcmp(argv[1], "-m") == 0 || strcmp(argv[1], "/m") == 0) && (argc ==4)) {
-        if(isMultiple(cloneAtof(argv[2]),cloneAtof(argv[3]))) {
+        if(isMultiple((int)cloneAtof(argv[2]),(int)cloneAtof(argv[3]))) {
             printf("Yes\n");
         } else {
             printf("No\n");

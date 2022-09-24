@@ -7,7 +7,7 @@ int cloneAtoi(char *s) {
     for(int i=0; s[i] != '\0'; i++) {
         result = result*10 + s[i] - '0';
     }
-    if (result <0) {
+    if (result < 0) {
         printf("Error!");
         return 0;
     }

@@ -2,26 +2,25 @@
 #include <stdlib.h>
 #include <time.h>
 
-int findMax(int *arr, int size) {
-    int maxItem = arr[0], index=0;
-    for(int i=0; i < size; i++){
-        if(arr[i] > maxItem) {
-            maxItem = arr[i];
-            index = i;
-        }
-    }
-    return index;
-}
+typedef struct answer {
+    int max;
+    int min;
+} answer;
 
-int findMin(int *arr, int size) {
-    int minItem = arr[0], index=0;
-    for(int i=0; i < size; i++){
-        if(arr[i] < minItem) {
-            minItem = arr[i];
-            index = i;
+answer findIndexMinOrMax(int *arr, int size) {
+    int indexMax=0, indexMin =0;
+    answer ans;
+    for(int i=1; i < size; i++){
+        if(arr[IndexMax] < arr[i]) {
+            IndexMax = i;
+        }
+        if(arr[IndexMin] > arr[i]) {
+            indexMin = i;
         }
     }
-    return index;
+    ans.max = indexMax;
+    ans.min = indexMin;
+    return ans;
 }
 
 void printArr(int *arr, int size) {
@@ -31,6 +30,7 @@ void printArr(int *arr, int size) {
 }
 
 int main() {
+    answer ans;
     int size=0;
     printf("Enter size of array: ");
     scanf("%d", &size);
@@ -42,15 +42,13 @@ int main() {
     }
     printf("\n");
 
-    int indexMaxItem = findMax(arr,size);
-    int indexMinItem = findMin(arr,size);
-    int maxItem = arr[indexMaxItem];
-    int minItem = arr[indexMinItem];
-    printf("Max item is %d\n", maxItem);
-    printf("Min item is %d\n", minItem);
+    ans = findIndexMax(arr,size);
 
-    arr[indexMaxItem] = minItem;
-    arr[indexMinItem] = maxItem;
+    printf("Max item is %d\n", ans.max);
+    printf("Min item is %d\n", ans.min);
+
+    arr[ans.max] = ans.min;
+    arr[ans.min] = ans.max;
 
     printArr(arr, size);
 }
