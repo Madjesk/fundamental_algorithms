@@ -11,7 +11,6 @@ char *createDinamichString(int *k) {
     return leksema;
 }
 
-
 int isShortLine(char *ch) {
     if (*ch == '\n' || *ch == EOF) {
         printf("Error! You wrote short string, add words\n");
