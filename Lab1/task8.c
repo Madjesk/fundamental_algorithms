@@ -1,8 +1,38 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
 #define MAX_SIZE 128
+
+float cloneAtoi(char *s) {
+    int negative = 1, i = 0;
+    float result= 0;
+    if (s[0] == '-') {
+        i++;
+        negative = -1;
+    }
+
+    for (; s[i] != '\0'; i++) {
+        result = result * 10 + (s[i] - '0');
+    }
+
+    return result * negative;
+}
+
+int isNum(char *s) {
+    if(*s=='-') {
+        s++;
+    }
+    while(*s) {
+        if(isdigit(*s)) {
+            s++;
+        } else {
+            return 0;
+        }
+    }
+    return 1;
+}
 
 void printArray(int *arr, int size) {
     for(int i=0; i < size; i++) {
@@ -23,7 +53,6 @@ int countEvenNumbers(int *arr, int size) {
     for(int i=0; i < size; i++) {
         if((arr[i] % 2 ==0) && (arr[i] >= 0)) {
             counter+=1;
-            printf("Кр %d\n", arr[i]);
         }
     }
     return counter;
@@ -39,7 +68,7 @@ int sumOfPreviousNumbers(int *arr, int size, int index) {
 
 int *getArrWithEvenNumbers(int *oldArr, int size, int *newArr) {
     for(int i=0, m=0; i <= size; i++) {
-        if(oldArr[i]% 2 ==0) {
+        if(oldArr[i]% 2 ==0 && oldArr[i] >= 0) {
             newArr[m]=oldArr[i];
             m++;
         }
@@ -70,6 +99,7 @@ int sumOfLowerNumbers(int *arr, int size, int index) {
 int main(int argc, char * argv[]) {
     FILE *fin;
     int arr[MAX_SIZE];
+    char number[11];
     int counterElems = 0, i= 0, counterChet=0, initialNum=0;
 
     if (argc != 3) {
@@ -83,9 +113,16 @@ int main(int argc, char * argv[]) {
         return 0;
     }
 
-    while (fscanf(fin, "%d", &arr[counterElems]) != EOF) {
-        counterElems++;
+    while(!feof(fin)) {
+        if((counterElems<129) && fscanf(fin, "%s", number) != EOF && isNum(number)) {
+            arr[counterElems] = cloneAtoi(number);
+            counterElems+=1;
+        }
     }
+
+//    while (fscanf(fin, "%d", &arr[counterElems]) != EOF) {
+//        counterElems++;
+//    }
 
     if(counterElems == 0) {
         printf("Add numbers in file");
@@ -105,7 +142,8 @@ int main(int argc, char * argv[]) {
     else if(strcmp(argv[2], "-b") == 0) {
         int counterEven = countEvenNumbers(arr, counterElems);
         int newArr[counterEven];
-
+        printf("кол-во чет %d\n", counterEven);
+        printf("Result: \n");
         printArray(getArrWithEvenNumbers(arr,counterElems, newArr), counterEven);
     }
     else if(strcmp(argv[2], "-c") == 0) {
