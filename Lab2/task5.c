@@ -33,21 +33,31 @@ void fill_arr_numbers_from_range(int *arr, int size, int left, int right) {
     }
 }
 
-void *create_unique_arr(int *arr, int size, int *new_size) {
-    int find_clone;
-    int *new_arr = (int*)malloc(size*sizeof(int));
-    for(int i=0; i < size;i++){
-        find_clone=0;
-        for(int j=0; j< (*new_size); j++) {
-            if(arr[i]==new_arr[j]) {
-                find_clone = 1;
+void * create_unique_arr(int *arr, int size, int *new_size) {
+    int count_founded_numbers[size], counter;
+
+    for(int i =0; i< size; i++) {
+        counter=0;
+        for(int j =0; j< size; j++) {
+            if(arr[i] == arr[j]){
+                counter++;
             }
         }
-        if(!find_clone) {
-            new_arr[(*new_size)++] = arr[i];
+        count_founded_numbers[i] = counter;
+        if(count_founded_numbers[i] == 1) {
+            *new_size+=1;
         }
     }
-    new_arr = realloc(new_arr, (*new_size)*sizeof(int));
+
+    int *new_arr= malloc((*new_size)*sizeof(int));
+    int *p_new_arr = new_arr;
+    for(int i=0; i<size; i++){
+        if(count_founded_numbers[i]==1) {
+            *p_new_arr = arr[i];
+            p_new_arr++;
+        }
+    }
+//    printf("new size:%d\n", *new_size);
     return new_arr;
 }
 
@@ -83,6 +93,10 @@ int main(int argc, char * argv[]) {
     else if(strcmp(argv[1], "-unique") == 0) {
         int new_size=0;
         int * new_arr = create_unique_arr(arr,size, &new_size);
+        if(new_size == 0) {
+            printf("Can't find unique elems\n");
+            return 0;
+        }
         print_arr(new_arr, new_size);
     }
 }
