@@ -33,7 +33,7 @@ void fill_arr_numbers_from_range(int *arr, int size, int left, int right) {
     }
 }
 
-void * create_unique_arr(int *arr, int size, int *new_size) {
+int * create_unique_arr(int *arr, int size, int *new_size) {
     int count_founded_numbers[size], counter;
 
     for(int i =0; i< size; i++) {
