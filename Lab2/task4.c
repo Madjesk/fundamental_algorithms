@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <math.h>
+#define EPSILON 1e-7
 
 double clone_pow(double number, int degree) {
     if(degree==0) {
@@ -23,7 +24,7 @@ double avg_geom(int count, ...) {
         res*= va_arg(numbers, double);
     }
     va_end(numbers);
-    if((count % 2 == 0) && (res < 0)) {
+    if((count % 2 == 0) && (res < EPSILON)) {
         return NAN;
     }
     return pow(res, 1.0/count);
