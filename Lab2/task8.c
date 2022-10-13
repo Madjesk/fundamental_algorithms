@@ -24,5 +24,5 @@ double dihot_method(double (*func)(double), double begin, double end, int acc) {
 }
 
 int main() {
-    printf("Answer: %lf\n", dihot_method(func, (double)1.1, (double)3.5, 3));
+    printf("Answer: %lf\n", dihot_method(func, (double)1.1, (double)3.5, 10));
 }
