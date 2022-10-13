@@ -44,7 +44,7 @@ char *odd_index_up(char *str, int len) {
 
     for(int i =0; i < len; i++){
         if(i % 2 == 0) {
-            result_str[i] = toupper(str[i]);
+            result_str[i] = to_upper_clone(str[i]);
         } else {
             result_str[i] = str[i];
         }
