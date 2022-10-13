@@ -14,6 +14,10 @@ int count_len(char *str) {
 
 char *reverse(char *str, int len) {
     char *reversed_str = (char *)malloc((len + 1)*sizeof(char));
+    if(reversed_str == NULL) {
+        printf("Malloc error");
+        return 0;
+    }
     reversed_str[len] = 0;
 
     for(int i=0; i < len; i++) {
@@ -32,6 +36,10 @@ char to_upper_clone(char ch){
 
 char *odd_index_up(char *str, int len) {
     char *result_str = (char *)malloc((len + 1)*sizeof(char));
+    if(result_str == NULL) {
+        printf("Malloc error");
+        return 0;
+    }
     result_str[len] = 0;
 
     for(int i =0; i < len; i++){
@@ -62,6 +70,10 @@ int is_digit(char ch){
 
 char *str_in_order_digits_letters_other(char *str, int len) {
     char *result_str = (char *)malloc((len+1)*sizeof(char));
+    if(result_str == NULL) {
+        printf("Malloc error");
+        return 0;
+    }
     char *p_result_str = result_str;
     char *p_str = str;
 
@@ -94,6 +106,10 @@ char *str_in_order_digits_letters_other(char *str, int len) {
 
 char * contact_clone(char *str1, char *str2, int len1, int len2) {
     char * result_str = (char *)malloc((len1+1)*sizeof(char) + len2 * sizeof(char));
+    if(result_str == NULL) {
+        printf("Malloc error");
+        return 0;
+    }
     char *p_result_str = result_str;
 
     while(*str1) {
@@ -117,15 +133,23 @@ int main(int argc, char * argv[]) {
         printf("%d\n", count_len(argv[2]));
     }
     else if(strcmp(argv[1], "-r") == 0) {
-        printf("%s\n", reverse(argv[2], count_len(argv[2])));
+        char * str = reverse(argv[2], count_len(argv[2]));
+        printf("%s\n", str);
+        free(str);
     }
     else if(strcmp(argv[1], "-u") == 0) {
-        printf("%s\n", odd_index_up(argv[2], count_len(argv[2])));
+        char * str = odd_index_up(argv[2], count_len(argv[2]));
+        printf("%s\n", str);
+        free(str);
     }
     else if(strcmp(argv[1], "-n") == 0) {
-        printf("%s\n", str_in_order_digits_letters_other(argv[2], count_len(argv[2])));
+        char * str = str_in_order_digits_letters_other(argv[2], count_len(argv[2]));
+        printf("%s\n", str);
+        free(str);
     }
     else if(strcmp(argv[1], "-c") == 0) {
-        printf("%s\n", contact_clone(argv[2], argv[3], count_len(argv[2]), count_len(argv[3])));
+        char * str = contact_clone(argv[2], argv[3], count_len(argv[2]), count_len(argv[3]));
+        printf("%s\n", str);
+        free(str);
     }
 }
