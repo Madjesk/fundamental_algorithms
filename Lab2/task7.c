@@ -58,7 +58,7 @@ double find_value_polinom(double point, int degree, ...) {
 int main() {
     printf("The result: %lf\n", find_value_polinom(2.,3,1.,2.,3.));
 
-    int is_convex_ans = is_convex(6 ,1.,1.,2.,2.,3.,3.,4.,4.);
+    int is_convex_ans = is_convex(8 ,1.,1.,2.,2.,3.,3.,4.,4.);
     if(is_convex_ans == 1) {
         printf("Convex\n");
     }
