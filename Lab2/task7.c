@@ -25,10 +25,10 @@ int is_convex(int n, ...) {
 
         for (int i = 0; i < peaks; i++) {
             x1 = pos[(i + 1) % peaks].x - pos[i % peaks].x;
-            y1 = pos[(i + 1) % peaks].y - pos[i % peaks].x;
+            y1 = pos[(i + 1) % peaks].y - pos[i % peaks].y;
 
             x2 = pos[(i + 2) % peaks].x - pos[i % peaks].x;
-            y2 = pos[(i + 2) % peaks].y - pos[i % peaks].x;
+            y2 = pos[(i + 2) % peaks].y - pos[i % peaks].y;
 
             determinant = x1 * y2 - x2 * y1;
             tmp_sign = determinant > EPSILON ? 1 : 0;
