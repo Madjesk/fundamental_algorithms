@@ -5,7 +5,8 @@
 enum {
     WRONG_INPUT = -1,
     FILE_NOT_FOUND = -2,
-    SUCCESSFULLY = -3
+    SUCCESSFULLY = -3,
+    WRONG_FLAG = -4
 };
 
 int write_files_from_file(const char * files) {
@@ -13,7 +14,7 @@ int write_files_from_file(const char * files) {
     char file_name[200],  c;
     out = fopen("out.txt", "w");
     file_with_files = fopen(files, "r");
-
+    int flag = 1;
     if (!files){
         printf("Невозможно открыть файл!");
         return 2;
@@ -25,11 +26,14 @@ int write_files_from_file(const char * files) {
         if (!in){
             return FILE_NOT_FOUND;
         }
-
+        if(!flag) {
+            fputc('\n', out);
+        } else {
+            flag = 0;
+        }
         while ((c = fgetc(in)) != EOF) {
             fputc(c, out);
         }
-        fputc('\n', out);
         fclose(in);
     }
 
@@ -44,16 +48,22 @@ int write_files_from_stdin() {
     out = fopen("out.txt", "w");
     printf("Enter files: \n");
     scanf("%s", file_name);
+    int flag = 1;
     while (!feof(stdin)) {
         in = fopen(file_name, "r");
         if (!in) {
             return FILE_NOT_FOUND;
         }
+
+        if(!flag) {
+            fputc('\n', out);
+        } else {
+            flag = 0;
+        }
         while ((c = fgetc(in)) != EOF) {
             fputc(c, out);
         }
         fclose(in);
-        putc('\n', out);
         scanf("%s", file_name);
 }
     fclose(out);
@@ -96,7 +106,13 @@ int main(int argc, char const *argv[]) {
         write_files_from_stdin();
     }
     else if(strcmp(argv[1], "-arg") == 0) { //через аргв
+        if (argc < 3) {
+            return  WRONG_INPUT;
+        }
         write_files_from_args(argv, argc);
+    }
+    else {
+        return WRONG_FLAG;
     }
 
 
