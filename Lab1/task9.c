@@ -5,17 +5,16 @@
 
 enum {
     SUCCESSFULLY = -3,
-    WRONG_INPUT = -4
+    WRONG_INPUT = -4,
+    SMALL_LEN = -52
 };
 
 int check_number(char *number, int base) {
     if(strcmp(number, "0") == 0) {
-        printf("зашли с нулем");
         return WRONG_INPUT;
     }
     while(*++number) {
         if(isdigit(*number) && (*number - '0' >= base) || isalpha(*number) && *number - 'A' + 10 >= base) {
-            printf("зашли с 2");
             return WRONG_INPUT;
         }
     }
@@ -25,6 +24,9 @@ int check_number(char *number, int base) {
 int convert_to_10_system(char *str, int base) {
     if(strcmp(str, "0") == 0) {
         return 0;
+    }
+    if(base <= 1) {
+        return WRONG_BASE;
     }
     int flag = 1, res=0;
     char *p_str;
@@ -40,8 +42,10 @@ int convert_to_10_system(char *str, int base) {
     return flag * res;
 }
 
-
 char *reverse(char *str, int len) {
+    if (len < 1){
+        return  SMALL_LEN;
+    }
     char *reversed_str = (char *)malloc((len + 1)*sizeof(char));
     if(reversed_str == NULL) {
         printf("Malloc error");
