@@ -16,8 +16,7 @@ int write_files_from_file(const char * files) {
     file_with_files = fopen(files, "r");
     int flag = 1;
     if (!files){
-        printf("Невозможно открыть файл!");
-        return 2;
+        return FILE_NOT_FOUND;
     }
 
     while (!feof(file_with_files)){
@@ -75,6 +74,9 @@ int write_files_from_args(const char *argv[], int argc) {
     char c;
 
     out = fopen("out.txt", "w");
+    if(!out) {
+        return FILE_NOT_FOUND;
+    }
     for (int i = 2; i < argc; i++) {
         in = fopen(argv[i], "r");
         if (!in) {
@@ -96,6 +98,9 @@ int write_files_from_args(const char *argv[], int argc) {
 }
 
 int main(int argc, char const *argv[]) {
+    if(argc == 1) {
+        return WRONG_FLAG;
+    }
     if(strcmp(argv[1], "-fi") == 0) { //список файлов в файле
         if (argc != 3){;
             return WRONG_INPUT;
@@ -114,6 +119,4 @@ int main(int argc, char const *argv[]) {
     else {
         return WRONG_FLAG;
     }
-
-
 }
