@@ -16,6 +16,8 @@ enum {
     FILE_NOT_FOUND = -1,
     SUBSTR_FOUND = -2,
     SUBSTR_NOT_FOUND = -3,
+    MEMORY_ERROR = -4,
+    SUCCESSFULLY = -5
 };
 
 int find_str(char *str, char *substr) {
@@ -23,7 +25,10 @@ int find_str(char *str, char *substr) {
 	str_len = strlen(str);
 	substr_len = strlen(substr);
 	int *prefix = (int*)malloc(substr_len * sizeof(int));
-
+    if (!prefix){
+        free(*prefix);
+        return MEMORY_ERROR;
+    }
 	//Calculate prefix-function
 	prefix[0] = 0;
 	for(i = 1, j = 0; i < substr_len; i++) {
@@ -56,7 +61,7 @@ int check_files(char *substr, int num_of_files, ...) {
     char *file_name;
     va_list p;
     va_start(p, num_of_files);
-    int is_Found = 0, line =1 ;
+    int is_found = 0, line =1 ;
     char str[BUFSIZ];
     while(num_of_files != 0) {
         line = 1;
@@ -67,18 +72,21 @@ int check_files(char *substr, int num_of_files, ...) {
             return FILE_NOT_FOUND;
         }
         while(fgets(str, sizeof(str), fin) != NULL) {
-            is_Found = find_str(str, substr);
-            if(is_Found == SUBSTR_FOUND) {
+            is_found = find_str(str, substr);
+            if(is_found == SUBSTR_FOUND) {
                 printf("Substr %s found in file: %s, in line=%d\n", substr, file_name, line);
-            } else if(is_Found == SUBSTR_NOT_FOUND) {
-                // printf("Substr %s NOT found in file: %s, in line=%d\n", substr, file_name, line);
+            } else if(is_found == SUBSTR_NOT_FOUND) {
+                printf("Substr %s NOT found in file: %s, in line=%d\n", substr, file_name, line);
+            } else if(is_found == MEMORY_ERROR) {
+                printf("Problems with memory...\n");
+                return MEMORY_ERROR;
             }
             line++;
         }
         fclose(fin);
     }
     va_end(p);
-    return 1;
+    return SUCCESSFULLY;
 }
 
 int main(int argc, char * argv[]) {
