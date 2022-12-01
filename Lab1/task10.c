@@ -12,6 +12,8 @@ enum {
 
 float **generate_matrix(int *rows, int *columns) {
     *rows = rand() % 10 + 1;
+    // *rows = 2;
+    // *columns = 2;
     *columns = rand() % 10 + 1;
     float **matrix = (float**)malloc(sizeof(float *) * *rows);
     if(matrix == NULL) {
@@ -53,7 +55,6 @@ float **multiply_matrices(float **matrix1, float **matrix2, int rows_m1, int col
                 return NULL;
             }
         }
-
         for(int i = 0; i < rows_m1; i++) {
             for(int j = 0; j < columns_m2; j++) {
                 new_matrix[i][j] = 0;
@@ -75,9 +76,11 @@ int find_determinant(float **matrix, int rows, int columns) {
         float * tmp;
         for (int i = 0; i < rows; i++) {
             int k = i;
-            for (int j = i + 1; j < rows; j++)
-                if (fabs(matrix[j][i]) > fabs(matrix[k][i]))
+            for (int j = i + 1; j < rows; j++) {
+                if (fabs(matrix[j][i]) > fabs(matrix[k][i])) {
                     k = j;
+                }
+            }
             if (fabs(matrix[k][i]) < EPS) {
                 det = 0;
                 break;
@@ -85,15 +88,20 @@ int find_determinant(float **matrix, int rows, int columns) {
             tmp = matrix[i];
             matrix[i] = matrix[k];
             matrix[k] = tmp;
-            if (i != k)
+            if (i != k) {
                 det = -det;
+            }
             det *= matrix[i][i];
-            for (int j = i + 1; j < rows; j++)
+            for (int j = i + 1; j < rows; j++) {
                 matrix[i][j] /= matrix[i][i];
-            for (int j = 0; j < rows; ++j)
-                if (j != i && fabs(matrix[j][i]) > EPS)
-                    for (int k = i + 1; k < rows; k++)
+            }
+            for (int j = 0; j < rows; ++j) {
+                if (j != i && fabs(matrix[j][i]) > EPS) {
+                    for (int k = i + 1; k < rows; k++) {
                         matrix[j][k] -= matrix[i][k] * matrix[j][i];
+                    }
+                }
+            }
         }
         return det;
     }
@@ -112,7 +120,6 @@ int main(int argc, char * argv[]) {
     int rows_of_matrix2 = 0, columns_of_matrix2 = 0;
     int determinant_of_matrix1, determinant_of_matrix2;
     float **matrix1 = generate_matrix(&rows_of_matrix1, &columns_of_matrix1);
-
     if(matrix1 != NULL) {
         printf("First matrix: \n");
         print_matrix(matrix1, rows_of_matrix1, columns_of_matrix1);
@@ -140,13 +147,13 @@ int main(int argc, char * argv[]) {
     determinant_of_matrix1 = find_determinant(matrix1, rows_of_matrix1, columns_of_matrix1);
     determinant_of_matrix2 = find_determinant(matrix2, rows_of_matrix2, columns_of_matrix2);
 
-    if(determinant_of_matrix1 != -5) {
+    if(determinant_of_matrix1 != WRONG_MATRIX_SIZE) {
         printf("Determinant of first matrix: %d\n", determinant_of_matrix1);
     } else {
         printf("Failed to find determinant of first matrix\n");
     }
 
-    if(determinant_of_matrix2 != -5) {
+    if(determinant_of_matrix2 != WRONG_MATRIX_SIZE) {
         printf("Determinant of second matrix: %d\n", determinant_of_matrix2);
     } else {
         printf("Failed to find determinant of second matrix\n");

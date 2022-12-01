@@ -21,7 +21,7 @@ int is_alpha(char ch) {
 }
 
 int is_digit(char ch){
-    if (ch >= '0' && ch <= '9') { // return это
+    if (ch >= '0' && ch <= '9') { // return
         return 1;
     } else {
         return 0;
@@ -114,7 +114,7 @@ char* my_realloc(char* from, int curr_size){
 
 int main(int argc, char * argv[]) {
     FILE *fin, *fout;
-    int c, _c = 0, sized = 0, sized_curr = 16;
+    int c, _c = 0, size = 0, sized_curr = 16;
     int smallest_system, number_in_10_system;
     fin = fopen(argv[1], "r");
     fout = fopen("out.txt", "w");
@@ -128,21 +128,21 @@ int main(int argc, char * argv[]) {
     while(!feof(fin)) {
         c = fgetc(fin);
         if (isalnum(c)){
-            if (sized == sized_curr - 2){
-                buff[sized] = '\0';
+            if (size == sized_curr - 2){
+                buff[size] = '\0';
                 buff = my_realloc(buff, sized_curr*=2);
             }
-            buff[sized++] = c;
+            buff[size++] = c;
         }
         else if(isalnum(_c) && (c == ' ' || c == '\n' || c == '\t' || c == EOF)) {
-            if (sized == sized_curr - 2){
-                buff[sized] = '\0';
+            if (size == sized_curr - 2){
+                buff[size] = '\0';
                 buff = my_realloc(buff, sized_curr + 1);
                 if(buff == NULL) {
                   return MEMORY_ERROR;
                 }
             }
-            buff[sized] = '\0';
+            buff[size] = '\0';
 
             smallest_system = find_the_smallest_number_system(buff);
             number_in_10_system = convert_to_10_system(buff, smallest_system);
@@ -153,7 +153,7 @@ int main(int argc, char * argv[]) {
             }
             free(buff);
             sized_curr = 16;
-            sized = 0;
+            size = 0;
             buff = str_init(sized_curr);
             if(buff == NULL) {
               return MEMORY_ERROR;

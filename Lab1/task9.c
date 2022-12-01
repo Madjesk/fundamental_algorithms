@@ -61,7 +61,7 @@ char *reverse(char *str, int len) {
 }
 
 char *convert_10_to_other_system(int number, int base, int size) {
-    char *reversed_str = (char*)malloc(sizeof(char)*size+1); //нужно +1?
+    char *reversed_str = (char*)malloc(sizeof(char)*size+1); 
     int tmp, i=0;
     if(base <=1) {
         return NULL;
@@ -90,7 +90,7 @@ int get_str(char** buf, int* size){
     }
     while(c != EOF && c != '\n' && c != ' '){
         if (len == initial_size){
-            initial_size*=2; //А точно ли умножение ?
+            initial_size*=2;
             tmp = (char*)realloc(*buf, initial_size);
             if (!tmp){
                 free(*buf);
@@ -128,14 +128,14 @@ int main() {
 
     printf("Enter numbers: \n");
     while(1) {
-        if(get_str(&buff, &size) == -6) {
+        if(get_str(&buff, &size) == MEMORY_ERROR) {
             return MEMORY_ERROR;
         }
 
         if (!strcmp(buff, "Stop")) {
             break;
         } else {
-            if(check_number(buff, base) == -3) {
+            if(check_number(buff, base) == SUCCESSFULLY) {
                 result = abs(convert_to_10_system(buff, base));
                 if(result > max_num) {
                     free(max_number);
