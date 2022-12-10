@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-enum {
+enum ERRORS{
     WRONG_INPUT = -1,
     FILE_NOT_FOUND = -2,
     SUCCESSFULLY = -3,
@@ -13,19 +13,11 @@ enum {
 };
 
 int is_alpha(char ch) {
-    if ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z')) {
-        return 1;
-    } else {
-        return 0;
-    }
+    return (ch >= 'A' && ch <= 'Z');
 }
 
 int is_digit(char ch){
-    if (ch >= '0' && ch <= '9') { // return
-        return 1;
-    } else {
-        return 0;
-    }
+    return (ch >= '0' && ch <= '9');
 }
 
 char to_upper(char ch){
@@ -48,6 +40,14 @@ int is_number(char *s) {
         }
     }
     return 1;
+}
+
+int is_correct_symbol(char ch) {
+    if(is_digit(ch) || is_alpha(ch)) {
+        return 1;
+    } else {
+        return 0;
+    }
 }
 
 int find_the_smallest_number_system(char *str) {
@@ -114,7 +114,7 @@ char* my_realloc(char* from, int curr_size){
 
 int main(int argc, char * argv[]) {
     FILE *fin, *fout;
-    int c, _c = 0, size = 0, sized_curr = 16;
+    int c, _c = 0, size = 0, sized_curr = 3;
     int smallest_system, number_in_10_system;
     fin = fopen(argv[1], "r");
     fout = fopen("out.txt", "w");
@@ -127,15 +127,18 @@ int main(int argc, char * argv[]) {
     }
     while(!feof(fin)) {
         c = fgetc(fin);
-        if (isalnum(c)){
-            if (size == sized_curr - 2){
+        if (is_correct_symbol(c) || c == '-'){
+            if(_c == '-' && c == '-') {
+                continue;
+            }
+            if (size == sized_curr - 1){
                 buff[size] = '\0';
                 buff = my_realloc(buff, sized_curr*=2);
             }
             buff[size++] = c;
         }
-        else if(isalnum(_c) && (c == ' ' || c == '\n' || c == '\t' || c == EOF)) {
-            if (size == sized_curr - 2){
+        else if(is_correct_symbol(_c) && (c == ' ' || c == '\n' || c == '\t' || c == EOF) ) {
+            if (size == sized_curr - 1){
                 buff[size] = '\0';
                 buff = my_realloc(buff, sized_curr + 1);
                 if(buff == NULL) {
@@ -143,7 +146,6 @@ int main(int argc, char * argv[]) {
                 }
             }
             buff[size] = '\0';
-
             smallest_system = find_the_smallest_number_system(buff);
             number_in_10_system = convert_to_10_system(buff, smallest_system);
             if(c == EOF){
@@ -151,6 +153,14 @@ int main(int argc, char * argv[]) {
             } else {
                 fprintf(fout, "Number: %s; The smallest system %d; In 10: %d\n", buff, smallest_system, number_in_10_system);
             }
+            free(buff);
+            sized_curr = 16;
+            size = 0;
+            buff = str_init(sized_curr);
+            if(buff == NULL) {
+              return MEMORY_ERROR;
+            }
+        } else {
             free(buff);
             sized_curr = 16;
             size = 0;

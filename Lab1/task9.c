@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <math.h>
 
 enum {
     SUCCESSFULLY = -3,
@@ -21,6 +22,25 @@ int check_number(char *number, int base) {
         }
     }
     return SUCCESSFULLY;
+}
+
+void print_error(int code) {
+    switch(code) {
+        case -4:
+            printf("Wrong input\n");
+            break;
+        case -5:
+            printf("Small len\n");
+            break;
+        case -6:
+            printf("Memory error\n");
+            break;
+        case -7:
+            printf("Wrong base\n");
+            break;
+        default:
+            printf("Wrong error\n");
+    }
 }
 
 int convert_to_10_system(char *str, int base) {
@@ -61,18 +81,27 @@ char *reverse(char *str, int len) {
 }
 
 char *convert_10_to_other_system(int number, int base, int size) {
-    char *reversed_str = (char*)malloc(sizeof(char)*size+1); 
-    int tmp, i=0;
-    if(base <=1) {
+    char* reversed_str = (char*)malloc(sizeof(char)*size+1);
+    if(reversed_str == NULL) {
         return NULL;
     }
-    while(number) {
-        tmp = number % base;
+    int tmp, i = 0, minus = number > 0 ? 0 : 1;
+    if(base <= 1) {
+        return NULL;
+    }
+
+    while(abs(number)) {
+        tmp = abs(number) % base;
         reversed_str[i] = tmp > 9 ? tmp - 10 + 'A' : tmp + '0';
-        number /= base;
+        number = abs(number) / base;
         i++;
     }
-    char * result_str = reverse(reversed_str, i);
+    if(minus) {
+        reversed_str[i] = '-';
+        i++;
+    }
+    char* result_str = reverse(reversed_str, i);
+    free(reversed_str);
     if(result_str != NULL) {
         return result_str;
     } else {
@@ -83,7 +112,7 @@ char *convert_10_to_other_system(int number, int base, int size) {
 int get_str(char** buf, int* size){
     char c = getchar();
     char* tmp = NULL;
-    int initial_size = 2, len = 0;
+    int initial_size = 16, len = 0;
     *buf = (char*)malloc(initial_size*sizeof(char));
     if (!*buf){
         return MEMORY_ERROR;
@@ -119,16 +148,18 @@ int main() {
     int base, max_num = 0, size = 0, result, max_size;
     char* buff = NULL;
     char* max_number = NULL;
-
     printf("Enter base: \n");
     scanf("%d", &base);
     if (base < 2 || base > 36) {
         return WRONG_INPUT;
+        print_error(WRONG_INPUT);
     }
 
     printf("Enter numbers: \n");
+    //TODO ничыего не ввели, а сразу STop - > error
     while(1) {
         if(get_str(&buff, &size) == MEMORY_ERROR) {
+            print_error(MEMORY_ERROR);
             return MEMORY_ERROR;
         }
 
@@ -136,24 +167,28 @@ int main() {
             break;
         } else {
             if(check_number(buff, base) == SUCCESSFULLY) {
-                result = abs(convert_to_10_system(buff, base));
-                if(result > max_num) {
+                result = convert_to_10_system(buff, base);
+                if(abs(result) > abs(max_num)) {
                     free(max_number);
                     max_number = NULL;
                     max_number = (char*)malloc(sizeof(char)*size);
+                    if(max_number == NULL) {
+                        return MEMORY_ERROR;
+                    }
+                    strcpy(max_number, buff);
                     max_size = size;
                     max_num = result;
-                    strcpy(max_number, buff);
                 }
                 size = 0;
                 free(buff);
                 buff = NULL;
             } else {
+                print_error(WRONG_INPUT);
                 return WRONG_INPUT;
             }
         }
     }
-
+    // if todo
     printf("Max number modulo: %s\n", max_number);
     printf("Max number modulo in 9 number system: %s\n", convert_10_to_other_system(max_num, 9, max_size));
     printf("Max number modulo in 18 number system: %s\n", convert_10_to_other_system(max_num, 18, max_size));

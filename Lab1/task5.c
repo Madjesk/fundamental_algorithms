@@ -2,7 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-enum {
+enum ERRORS{
     WRONG_INPUT = -1,
     FILE_NOT_FOUND = -2,
     SUCCESSFULLY = -3,
@@ -41,34 +41,6 @@ int write_files_from_file(const char * files) {
     return SUCCESSFULLY;
 }
 
-int write_files_from_stdin() {
-    FILE *out, *in;
-    char file_name[200], c;
-    out = fopen("out.txt", "w");
-    printf("Enter files: \n");
-    scanf("%s", file_name);
-    int flag = 1;
-    while (!feof(stdin)) {
-        in = fopen(file_name, "r");
-        if (!in) {
-            return FILE_NOT_FOUND;
-        }
-
-        if(!flag) {
-            fputc('\n', out);
-        } else {
-            flag = 0;
-        }
-        while ((c = fgetc(in)) != EOF) {
-            fputc(c, out);
-        }
-        fclose(in);
-        scanf("%s", file_name);
-}
-    fclose(out);
-    return SUCCESSFULLY;
-}
-
 int write_files_from_args(const char *argv[], int argc) {
     FILE *out, *in;
     char c;
@@ -97,12 +69,40 @@ int write_files_from_args(const char *argv[], int argc) {
     return SUCCESSFULLY;
 }
 
-int main(int argc, char const *argv[]) {
+int write_files_from_stdin() {
+    FILE *out, *in;
+    char file_name[200], c;
+    out = fopen("out.txt", "w");
+    printf("Enter files: \n");
+    scanf("%s", file_name);
+    int flag = 1;
+    while (!feof(stdin)) {
+        in = fopen(file_name, "r");
+        if (!in) {
+            return FILE_NOT_FOUND;
+        }
+
+        if(!flag) {
+            fputc('\n', out);
+        } else {
+            flag = 0;
+        }
+        while ((c = fgetc(in)) != EOF)
+            fputc(c, out);
+
+        fclose(in);
+        scanf("%s", file_name);
+    }
+    fclose(out);
+    return SUCCESSFULLY;
+}
+
+int main(int argc, const char *argv[]) {
     if(argc == 1) {
         return WRONG_FLAG;
     }
     if(strcmp(argv[1], "-fi") == 0) { //список файлов в файле
-        if (argc != 3){;
+        if (argc != 3){
             return WRONG_INPUT;
         }
        write_files_from_file(argv[2]);
