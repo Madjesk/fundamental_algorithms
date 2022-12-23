@@ -145,7 +145,7 @@ int get_str(char** buf, int* size){
 }
 
 int main() {
-    int base, max_num = 0, size = 0, result, max_size;
+    int base, max_num = 0, size = 0, result, max_size, is_enter = 0;
     char* buff = NULL;
     char* max_number = NULL;
     printf("Enter base: \n");
@@ -156,7 +156,6 @@ int main() {
     }
 
     printf("Enter numbers: \n");
-    //TODO ничыего не ввели, а сразу STop - > error
     while(1) {
         if(get_str(&buff, &size) == MEMORY_ERROR) {
             print_error(MEMORY_ERROR);
@@ -166,9 +165,10 @@ int main() {
         if (!strcmp(buff, "Stop")) {
             break;
         } else {
-            if(check_number(buff, base) == SUCCESSFULLY) {
+            if(check_number(buff, base) == SUCCESSFULLY && strcmp(buff, "Stop") != 0) {
                 result = convert_to_10_system(buff, base);
                 if(abs(result) > abs(max_num)) {
+                    is_enter = 1;
                     free(max_number);
                     max_number = NULL;
                     max_number = (char*)malloc(sizeof(char)*size);
@@ -188,10 +188,15 @@ int main() {
             }
         }
     }
-    // if todo
-    printf("Max number modulo: %s\n", max_number);
-    printf("Max number modulo in 9 number system: %s\n", convert_10_to_other_system(max_num, 9, max_size));
-    printf("Max number modulo in 18 number system: %s\n", convert_10_to_other_system(max_num, 18, max_size));
-    printf("Max number modulo in 27 number system: %s\n", convert_10_to_other_system(max_num, 27, max_size));
-    printf("Max number modulo in 36 number system: %s\n", convert_10_to_other_system(max_num, 36, max_size));
+    if(is_enter) {
+        printf("Max number modulo: %s\n", max_number);
+        printf("Max number modulo in 9 number system: %s\n", convert_10_to_other_system(max_num, 9, max_size));
+        printf("Max number modulo in 18 number system: %s\n", convert_10_to_other_system(max_num, 18, max_size));
+        printf("Max number modulo in 27 number system: %s\n", convert_10_to_other_system(max_num, 27, max_size));
+        printf("Max number modulo in 36 number system: %s\n", convert_10_to_other_system(max_num, 36, max_size));
+    } else {
+        printf("You did not enter numbers!\n");
+        return WRONG_INPUT;
+    }
+
 }
